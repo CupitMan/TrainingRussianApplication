@@ -448,7 +448,7 @@ class MainDesign(object):
         self.window_label_percent_result_widget = endsupport.WidgetPercentsResult()
         self.window_main_layout.addWidget(self.window_label_percent_result_widget)
 
-        self.window_three_labels_widget = endsupport.WidgetThreeLabelsResult()
+        self.window_three_labels_widget = endsupport.WidgetThreeLabelsResult(self)
         self.window_main_layout.addWidget(self.window_three_labels_widget)
 
         # Result
@@ -624,7 +624,7 @@ class MainDesign(object):
             self.window_label_percent_result_widget = endsupport.WidgetPercentsResult()
             self.window_main_layout.addWidget(self.window_label_percent_result_widget)
 
-            self.window_three_labels_widget = endsupport.WidgetThreeLabelsResult()
+            self.window_three_labels_widget = endsupport.WidgetThreeLabelsResult(self)
             self.window_main_layout.addWidget(self.window_three_labels_widget)
 
             # Result

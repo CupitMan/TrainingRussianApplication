@@ -33,8 +33,10 @@ class WidgetPercentsResult(QWidget):
 
 
 class WidgetThreeLabelsResult(QWidget):
-    def __init__(self):
+    def __init__(self, window):
         super().__init__()
+
+        self.window = window
 
         self.layout = QGridLayout(self)
         self.layout.setSpacing(20)
@@ -52,9 +54,12 @@ class WidgetThreeLabelsResult(QWidget):
         self.layout.addWidget(more_information, 0, 2, QtCore.Qt.AlignRight)
 
         self.layout.addWidget(vector[1], 1, 0)
-        self.layout.addWidget(StatisticButton(), 1, 2)
+        stabut = StatisticButton()
+        stabut.clicked.connect(self.window.StartStatisticSetup)
+        self.layout.addWidget(stabut, 1, 2)
         self.layout.addWidget(LineWidget(), 0, 1, 2, 1)
         self.layout.setSpacing(5)
+
 
 
 
