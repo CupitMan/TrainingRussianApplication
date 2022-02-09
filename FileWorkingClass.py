@@ -21,7 +21,7 @@ class FileWorker():
 
         flag = True
         # Check the word in dictionary
-        with open(path, 'r') as file:
+        with open(path, 'r', encoding='utf-8') as file:
             reader = csv.reader(file)
             for i in reader:
                 if i[0] == word:
@@ -29,7 +29,7 @@ class FileWorker():
 
         # Add new word
         if flag:
-            with open(path, 'a', newline='') as file:
+            with open(path, 'a', newline='', encoding='utf-8') as file:
                 writer = csv.writer(file)
                 writer.writerow([word])
 
@@ -42,7 +42,7 @@ class FileWorker():
         else:
             path = self.DocumentHard
             
-        with open(path, 'r') as file:
+        with open(path, 'r', encoding='utf-8') as file:
             reader = csv.reader(file)
             for i in reader:
                 print(i)
@@ -58,14 +58,14 @@ class FileWorker():
         temp = []
 
         # Temp will contain need words
-        with open(path, 'r') as file:
+        with open(path, 'r', encoding='utf-8') as file:
             reader = csv.reader(file)
             for i in reader:
                 if i[0] != word:
                     temp.append(i)
 
         # Write words from temp
-        with open(path, 'w', newline='') as file:
+        with open(path, 'w', newline='', encoding='utf-8') as file:
             writer = csv.writer(file)
             for i in temp:
                 writer.writerow(i)
