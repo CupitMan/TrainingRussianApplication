@@ -15,7 +15,7 @@ class StatisticWidget(QWidget):
     def __init__(self, dictionary, number):
         super().__init__()
 
-        self.setStyleSheet('border-top: 2px solid black; border-bottom: 2px solid black; background-color:#E5E5E5;')
+        self.setStyleSheet('border-top: 2px solid black; border-bottom: 2px solid black; background-color:#4F5051; color: white;')
 
         self.layout = QHBoxLayout(self)
         self.layout.setSpacing(0)
@@ -71,7 +71,56 @@ class LabelPercent(QLabel):
         statistic = Statistic.Statistic(dictionary['name'], dictionary['timeStart'], dictionary['timeEnd'],
                                         dictionary['allCount'], dictionary['rightCount'], dictionary['wrongCount'])
 
+        number = statistic.PercentsResultTest()
+        if number <= 40:
+            self.setText(str(statistic.PercentsResultTest()) + "%")
+            self.RedState()
+        elif 40 < number < 70:
+            self.setText(str(statistic.PercentsResultTest()) + "%")
+            self.YellowState()
+        else:
+            self.setText(str(statistic.PercentsResultTest()) + "%")
+            self.GreenState()
+
+
         self.setText(str(statistic.PercentsResultTest())+"%")
+
+    def RedState(self):
+        self.setStyleSheet('''
+                QLabel {{
+                    min-width: 80px;
+                    min-height: 50px;
+                    max-height: 60px;
+                    font-family: {};
+                    font-size: 18px;
+                    color: #B8604D;
+                }}
+                '''.format(FONT_FAMILY))
+
+    def YellowState(self):
+        self.setStyleSheet('''
+                QLabel {{
+                    min-width: 80px;
+                    min-height: 50px;
+                    max-height: 60px;
+                    font-family: {};
+                    color: #CDC477;
+                    font-size: 18px;
+                }}
+                '''.format(FONT_FAMILY))
+
+    def GreenState(self):
+        self.setStyleSheet('''
+                QLabel {{
+                    min-width: 80px;
+                    min-height: 50px;
+                    max-height: 60px;
+                    font-family: {};
+                    font-size: 18px;
+                    color: #87AF46;
+                }}
+                '''.format(FONT_FAMILY))
+
 
 
 class LabelTime(QLabel):
