@@ -2,7 +2,6 @@ from PyQt5.QtWidgets import QWidget, QMainWindow, QHBoxLayout, \
     QVBoxLayout, QPushButton, QLabel
 from PyQt5 import QtCore, QtGui
 import FileWorkingClass as bd
-import HelpingFuctionsAccentsWindow as acsupport
 
 
 
@@ -299,8 +298,35 @@ def CreateTitleLabelInfo():
 def CreateStatisticWindowHeader(window, image_path: str, title: str):
     label = CreateHeaderLabel(image_path)
     window.label_text = CreateHeaderTitleLabel(title)
-    return_button = acsupport.CreateButtonReturn()
+    return_button = CreateButtonReturn()
     window.window_header_layout.addWidget(label)
     window.window_header_layout.addWidget(window.label_text)
     window.window_header_layout.addWidget(return_button)
     return_button.clicked.connect(window.button_return)
+
+
+def CreateButtonReturn():
+    button = QPushButton()
+    button.setText("Вернуться на главную")
+    button.setStyleSheet("""
+        QPushButton {{
+            font-family: {};
+            font-size: 18px;
+            font-style: bold;
+            background-color: #2ea44f;
+            color: rgb(255, 255, 255);
+            max-width: 250px;
+            max-height: 55px;
+            min-height: 40px;
+            min-width: 200px;
+            border-radius: 25px;
+        }}
+
+        QPushButton:hover {{
+        background-color: #2a9c4a;
+            }}
+
+        QPushButton:pressed {{
+            background-color: #2bb351;
+        }}""".format(FONT_FAMILY))
+    return button

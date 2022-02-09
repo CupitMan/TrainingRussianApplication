@@ -1,10 +1,9 @@
-from PyQt5.QtWidgets import QMainWindow, QWidget, QHBoxLayout, QVBoxLayout
+from PyQt5.QtWidgets import QMainWindow, QWidget, QHBoxLayout, QVBoxLayout, QListWidget, QListWidgetItem
 from PyQt5.QtWidgets import QPushButton, QGridLayout, QLabel, QInputDialog
 from PyQt5 import QtCore
 import HelpingFunctionsMainWindow as support
 import HelpingFuctionsAccentsWindow as acsupport
 import datetime
-
 import JsonWorking
 from ClassAccent import *
 import FileWorkingClass as bd
@@ -12,10 +11,10 @@ import random
 from HelpingFuctionsAccentsWindow import FONT_FAMILY
 import HelpingEndWindow as endsupport
 import HelpingFunctionsSpellingsWindow as assupport
-import time
 from ClassSpellingWord import SpellingWord
 import Statistic as stat
 import HelpingFunctionStatisticWindow as stsupport
+from StatisticWidget import StatisticWidget
 
 
 accents_worker = bd.FileWorker('AllAccents.csv', 'HardAccents.csv')
@@ -653,7 +652,9 @@ class MainDesign(object):
 
         acsupport.DeleteAll(self)
 
-        #self.window_main_layout.setAlignment(QtCore.Qt.AlignTop)
+        self.window.central.setStyleSheet('background-color:#313336;')
+
+        self.window_main_layout.setAlignment(QtCore.Qt.AlignTop)
 
         # Header
         self.window_header_widget = support.CreateHeaderWidget()
@@ -665,10 +666,95 @@ class MainDesign(object):
         self.window_buttons_widget = stsupport.ButtonsWidget()
         self.window_main_layout.addWidget(self.window_buttons_widget)
 
-        # Buttons Layout
-        self.window_buttons_layout = QHBoxLayout(self.window_buttons_widget)
-        for i in range(100):
-            self.window_buttons_layout.addWidget(QPushButton())
+
+        # Vector Buttons
+        self.widget_vector = stsupport.GetWidgetsVector(['Название', 'Процент', 'Время', 'Количество\nслов'])
+        self.window_buttons_widget.layout.setSpacing(5)
+
+        for widget_number in range(len(self.widget_vector)):
+            if widget_number % 3 == 0:
+                self.window_buttons_widget.layout.addStretch(20)
+            self.window_buttons_widget.layout.addWidget(self.widget_vector[widget_number])
+
+        self.widget_vector[1].clicked.connect(self.SortUpName)
+        self.widget_vector[2].clicked.connect(self.SortDownName)
+        self.widget_vector[4].clicked.connect(self.SortUpPercent)
+        self.widget_vector[5].clicked.connect(self.SortDownPercent)
+        self.widget_vector[7].clicked.connect(self.SortUpTime)
+        self.widget_vector[8].clicked.connect(self.SortDownTime)
+        self.widget_vector[10].clicked.connect(self.SortUpCount)
+        self.widget_vector[11].clicked.connect(self.SortDownCount)
+
+        # List
+        self.window_list_widget = stsupport.ListWidget()
+        self.window_main_layout.addWidget(self.window_list_widget)
+        self.statistic_list = QListWidget()
+        self.window_list_widget.layout.addWidget(self.statistic_list)
+
+        # Get Data
+        self.statistic_data = JsonWorking.ReadJson()['items']
+
+        for element in self.statistic_data:
+            new_item = StatisticWidget(element, self.statistic_data.index(element) + 1)
+            list_widget_item = QListWidgetItem(self.statistic_list)
+            list_widget_item.setSizeHint(new_item.sizeHint())
+            new_item.setEnabled(False)
+            self.statistic_list.addItem(list_widget_item)
+            self.statistic_list.setItemWidget(list_widget_item, new_item)
+
+
+    def DisplayList(self):
+
+        self.statistic_list.clear()
+
+        for element in self.statistic_data:
+            new_item = StatisticWidget(element, self.statistic_data.index(element) + 1)
+            list_widget_item = QListWidgetItem(self.statistic_list)
+            list_widget_item.setSizeHint(new_item.sizeHint())
+            new_item.setEnabled(False)
+            self.statistic_list.addItem(list_widget_item)
+            self.statistic_list.setItemWidget(list_widget_item, new_item)
+
+
+    def SortUpName(self):
+
+        self.statistic_data = sorted(self.statistic_data, key=lambda x: x['name'])
+        self.DisplayList()
+
+    def SortDownName(self):
+
+        self.statistic_data = sorted(self.statistic_data, key=lambda x: x['name'], reverse=True)
+        self.DisplayList()
+
+    def SortUpPercent(self):
+        self.statistic_data = sorted(self.statistic_data, key=lambda x: x['rightCount'] / x['allCount'])
+        self.DisplayList()
+
+    def SortDownPercent(self):
+        self.statistic_data = sorted(self.statistic_data, key=lambda x: x['rightCount'] / x['allCount'], reverse=True)
+        self.DisplayList()
+
+    def SortUpTime(self):
+        self.statistic_data = sorted(self.statistic_data, key=lambda x: x['timeEnd'] - x['timeStart'])
+        self.DisplayList()
+
+    def SortDownTime(self):
+        self.statistic_data = sorted(self.statistic_data, key=lambda x: x['timeEnd'] - x['timeStart'], reverse=True)
+        self.DisplayList()
+
+    def SortUpCount(self):
+        self.statistic_data = sorted(self.statistic_data, key=lambda x: x['allCount'])
+        self.DisplayList()
+
+    def SortDownCount(self):
+        self.statistic_data = sorted(self.statistic_data, key=lambda x: x['allCount'], reverse=True)
+        self.DisplayList()
+
+
+
+
+
+
 
 
 
