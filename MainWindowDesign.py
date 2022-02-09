@@ -15,6 +15,7 @@ import HelpingFunctionsSpellingsWindow as assupport
 import time
 from ClassSpellingWord import SpellingWord
 import Statistic as stat
+import HelpingFunctionStatisticWindow as stsupport
 
 
 accents_worker = bd.FileWorker('AllAccents.csv', 'HardAccents.csv')
@@ -646,3 +647,28 @@ class MainDesign(object):
 
             # Commit result to json
             JsonWorking.WriteToJson(self.statistic.items)
+
+
+    def StartStatisticSetup(self):
+
+        acsupport.DeleteAll(self)
+
+        #self.window_main_layout.setAlignment(QtCore.Qt.AlignTop)
+
+        # Header
+        self.window_header_widget = support.CreateHeaderWidget()
+        self.window_main_layout.addWidget(self.window_header_widget, QtCore.Qt.AlignTop)
+        self.window_header_layout = QHBoxLayout(self.window_header_widget)
+        support.CreateStatisticWindowHeader(self, "header1.png", "СТАТИСТИКА")
+
+        # Buttons Widget
+        self.window_buttons_widget = stsupport.ButtonsWidget()
+        self.window_main_layout.addWidget(self.window_buttons_widget)
+
+        # Buttons Layout
+        self.window_buttons_layout = QHBoxLayout(self.window_buttons_widget)
+        for i in range(100):
+            self.window_buttons_layout.addWidget(QPushButton())
+
+
+

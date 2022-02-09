@@ -2,6 +2,7 @@ import csv
 import os
 
 
+# -*- coding: utf-8 -*-
 class FileWorker():
     def __init__(self, name1, name2):
 
@@ -29,7 +30,7 @@ class FileWorker():
 
         # Add new word
         if flag:
-            with open(path, 'a', newline='', encoding='utf-8') as file:
+            with open(path, 'a', encoding='utf-8', newline='') as file:
                 writer = csv.writer(file)
                 writer.writerow([word])
 
@@ -58,7 +59,7 @@ class FileWorker():
         temp = []
 
         # Temp will contain need words
-        with open(path, 'r', encoding='utf-8') as file:
+        with open(path, 'rb', encoding='utf-8') as file:
             reader = csv.reader(file)
             for i in reader:
                 if i[0] != word:
@@ -78,7 +79,7 @@ class FileWorker():
         else:
             path = self.DocumentHard
 
-        with open(path, 'r') as file:
+        with open(path, 'r', encoding='utf-8') as file:
             reader = csv.reader(file)
             result = []
             if path == 'hard.csv':

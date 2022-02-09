@@ -2,6 +2,7 @@ from PyQt5.QtWidgets import QWidget, QMainWindow, QHBoxLayout, \
     QVBoxLayout, QPushButton, QLabel
 from PyQt5 import QtCore, QtGui
 import FileWorkingClass as bd
+import HelpingFuctionsAccentsWindow as acsupport
 
 
 
@@ -169,6 +170,7 @@ def CreateMainWindowHeader(window, image_path: str, title: str):
     window.window_header_layout.addWidget(label)
     window.window_header_layout.addWidget(window.label_text)
     window.window_header_layout.addWidget(button_statistic)
+    button_statistic.clicked.connect(window.StartStatisticSetup)
 
 def CreateStaticticButton():
     button = QPushButton()
@@ -294,3 +296,11 @@ def CreateTitleLabelInfo():
     """.format(FONT_FAMILY))
     return label
 
+def CreateStatisticWindowHeader(window, image_path: str, title: str):
+    label = CreateHeaderLabel(image_path)
+    window.label_text = CreateHeaderTitleLabel(title)
+    return_button = acsupport.CreateButtonReturn()
+    window.window_header_layout.addWidget(label)
+    window.window_header_layout.addWidget(window.label_text)
+    window.window_header_layout.addWidget(return_button)
+    return_button.clicked.connect(window.button_return)
