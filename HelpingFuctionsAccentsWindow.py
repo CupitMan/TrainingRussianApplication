@@ -52,7 +52,6 @@ def DeleteAll(self):
 # Create Accents Window Header
 def CreateAccentsWindowHeader(window, image_path: str, title: str):
     label = CreateHeaderLabel(image_path)
-    print(label)
     label_text = CreateHeaderTitleLabel(title)
     button_return = CreateButtonReturn()
     window.window_header_layout.addWidget(label)

@@ -1,16 +1,15 @@
-from PyQt5.QtWidgets import QMainWindow, QWidget, QHBoxLayout, QVBoxLayout, QListWidget, QListWidgetItem
-from PyQt5.QtWidgets import QPushButton, QGridLayout, QLabel, QInputDialog
+from PyQt5.QtWidgets import QMainWindow, QWidget, QHBoxLayout, QVBoxLayout, QListWidget, QListWidgetItem, QInputDialog
 from PyQt5 import QtCore
 import HelpingFunctionsMainWindow as support
 import HelpingFuctionsAccentsWindow as acsupport
+import HelpingFunctionsSpellingsWindow as assupport
+import HelpingEndWindow as endsupport
 import datetime
 import JsonWorking
 from ClassAccent import *
 import FileWorkingClass as bd
 import random
 from HelpingFuctionsAccentsWindow import FONT_FAMILY
-import HelpingEndWindow as endsupport
-import HelpingFunctionsSpellingsWindow as assupport
 from ClassSpellingWord import SpellingWord
 import Statistic as stat
 import HelpingFunctionStatisticWindow as stsupport
@@ -23,6 +22,8 @@ spelling_worker = bd.FileWorker('AllSpelling.csv', 'HardSpelling.csv')
 
 class MainDesign(object):
 
+
+    # Main Function of design main window
     def MainDesign(self, window: QMainWindow):
 
         # Constants
@@ -40,12 +41,8 @@ class MainDesign(object):
         # Header
         support.CreateMainWindowHeader(self, "header1.png", "ТРЕНАЖЕР ПО УДАРЕНИЯМ И ОРФОГРАФИИ")
 
-
         # Buttons
-        self.button_all_accents = support.CreateMainButtonsDesign("Все ударения")
-        self.button_all_spelling = support.CreateMainButtonsDesign("Вся орфография")
-        self.button_hard_accents = support.CreateMainButtonsDesign("Сложные ударения")
-        self.button_hard_spelling = support.CreateMainButtonsDesign("Сложная орфография")
+        self.CreateMainTestButtons()
 
         # Labels
         self.label_all_accents = support.CreateButtonsLabel(1)
@@ -77,6 +74,8 @@ class MainDesign(object):
         self.button_all_spelling.clicked.connect(self.StartDialogAllSpellings)
         self.button_hard_spelling.clicked.connect(self.StartDialogHardSpellings)
 
+
+    # Function layouts of main window
     def MainLayoutSetup(self):
 
         # Main Window Layout
@@ -117,6 +116,7 @@ class MainDesign(object):
         self.window_information_layout.setContentsMargins(0, 0, 0, 0)
         self.window_information_layout.setSpacing(0)
 
+
     # Settings: size, title, central widget
     def StandartWindowSettings(self, window: QMainWindow, size: tuple, title: str):
         window.resize(size[0], size[1])
@@ -130,6 +130,16 @@ class MainDesign(object):
         window.setCentralWidget(window.central)
         window.setMinimumWidth(1060)
 
+
+    # Create test buttons on main screen
+    def CreateMainTestButtons(self):
+
+        self.button_all_accents = support.CreateMainButtonsDesign("Все ударения")
+        self.button_all_spelling = support.CreateMainButtonsDesign("Вся орфография")
+        self.button_hard_accents = support.CreateMainButtonsDesign("Сложные ударения")
+        self.button_hard_spelling = support.CreateMainButtonsDesign("Сложная орфография")
+
+    # Start dialog window about all accents
     def StartDialogAllAccents(self):
         Information, IsOkAnswer = QInputDialog.getText(self, 'Ударения', 'Введите количество слов: ')
         if IsOkAnswer:
@@ -141,6 +151,8 @@ class MainDesign(object):
                 if acsupport.Else(self, IsOkAnswer, check, self.vector_numbers[0]):
                     self.StartAccents('all')
 
+
+    # Start dialog window about hard accents
     def StartDialogHardAccents(self):
         Information, IsOkAnswer = QInputDialog.getText(self, 'Ударения', 'Введите количество слов: ')
         if IsOkAnswer:
@@ -152,6 +164,8 @@ class MainDesign(object):
                 if acsupport.Else(self, IsOkAnswer, check, self.vector_numbers[1]):
                     self.StartAccents('hard')
 
+
+    # Layouts for testing for both options of test
     def TestLayoutSetup(self, title):
 
         # Widget Header
@@ -191,6 +205,8 @@ class MainDesign(object):
         # Layouts Vector
         self.vector_layouts = [self.window_label_layout, self.window_bottom_layout, self.window_word_layout]
 
+
+    # Start dialog window about hard spellings
     def StartDialogHardSpellings(self):
         Information, IsOkAnswer = QInputDialog.getText(self, 'Орфография', 'Введите количество слов: ')
         if IsOkAnswer:
@@ -202,10 +218,14 @@ class MainDesign(object):
                 if assupport.Else(self, IsOkAnswer, check, self.vector_numbers[3]):
                     self.StartSpellings('hard')
 
+
+    # Function for button "return to main window"
     def button_return(self):
         self.number_of_tests = 0
         self.test_starting_time = 0
         self.MainDesign(self.window)
+
+
 
     def StartAccents(self, flag):
 
@@ -245,7 +265,7 @@ class MainDesign(object):
 
         for button in self.word_pushbuttons_vector:
             self.window_word_layout.addWidget(button)
-            button.clicked.connect(self.push_on_letter_button)
+            button.clicked.connect(self.ClickLetterButton())
             if button.text().upper() not in self.vowels:
                 button.setEnabled(False)
 
@@ -266,7 +286,7 @@ class MainDesign(object):
         # Create Button Next
         self.button_next = acsupport.CreateButtonNext()
         self.button_next.setEnabled(False)
-        self.button_next.clicked.connect(self.next_step)
+        self.button_next.clicked.connect(self.NextStep)
         self.window_bottom_layout.addWidget(self.button_next, alignment=QtCore.Qt.AlignRight)
 
     def add_or_remove_word_accent(self):
@@ -276,7 +296,7 @@ class MainDesign(object):
         else:
             accents_worker.addition(self.current_word.word, 'hard')
 
-    def next_step(self):
+    def NextStep(self):
 
         self.button_bottom.setEnabled(True)
 
@@ -284,7 +304,6 @@ class MainDesign(object):
             self.button_next.setText("Завершить")
 
         if self.current_number_word == len(self.all_curent_words):
-            self.button_next.setEnabled(False)
             self.StartEnd()
         else:
 
@@ -299,6 +318,8 @@ class MainDesign(object):
             # Next button disabled
             self.button_next.setEnabled(False)
 
+
+    # Update statistic on screen
     def UpdateStatisticWords(self):
         self.label_wrong_words.setText(f"Неправильных: {self.number_wrong_words}/{len(self.all_curent_words)}")
         self.label_right_words.setText(f"Правильных: {self.number_right_words}/{len(self.all_curent_words)}")
@@ -379,29 +400,48 @@ class MainDesign(object):
             }}
             """.format(FONT_FAMILY))
 
-    def push_on_letter_button(self):
-        right_index = self.current_word.index_stress
-        sender_button = self.sender()
-        current_index = self.word_pushbuttons_vector.index(sender_button)
+
+    # Block buttons from vector
+    def BlockButtons(self, buttons: list):
+
+        for button in buttons:
+            button.setEnabled(False)
+
+
+    def ProccesingAnswer(self, right_index: int, current_index: int):
+
         if right_index == current_index:
             self.right_answer(current_index)
         else:
             self.wrong_answer(current_index, right_index)
 
+
+    def ClickLetterButton(self):
+
+        right_index = self.current_word.index_stress
+        sender_button = self.sender()
+        current_index = self.word_pushbuttons_vector.index(sender_button)
+
+        # Two ways: user answer right or wrong (select right index of buttons or not)
+        self.ProccesingAnswer(right_index, current_index)
+
+        # Update statistic on screen
         self.UpdateStatisticWords()
+
+        # Do available "next" button
         self.button_next.setEnabled(True)
 
-        for button in self.word_pushbuttons_vector:
-            button.setEnabled(False)
+        # Block all buttons
+        self.BlockButtons(self.word_pushbuttons_vector)
 
     def keyPressEvent(self, event):
         if event.key() == 16777220:
             if self.label_text == 'ТРЕНАЖЕР ПО УДАРЕНИЯМ':
                 if self.button_next.isEnabled():
-                    self.next_step()
+                    self.NextStepAccents()
             else:
                 if self.button_next.isEnabled():
-                    self.next_step_spelling()
+                    self.NextStepSpelling()
 
     def InfoLabels(self):
         self.window_info_layout = QVBoxLayout()
@@ -434,7 +474,7 @@ class MainDesign(object):
         self.end_time = round(datetime.datetime.now().timestamp())
         if self.flag == 'all':
             self.statistic = stat.Statistic("Ударения (полностью)", self.test_starting_time,
-                                        self.end_time, self.number_of_tests, self.number_right_words, self.number_wrong_words)
+                                            self.end_time, self.number_of_tests, self.number_right_words, self.number_wrong_words)
         else:
             self.statistic = stat.Statistic("Ударения (сложные)", self.test_starting_time,
                                             self.end_time, self.number_of_tests, self.number_right_words,
@@ -459,8 +499,8 @@ class MainDesign(object):
         self.label_percents.GiveText(self.statistic.PercentsResultTest())
 
         three_items = [endsupport.InformationLabelLeft(f"Время прохождения теста составило: {self.statistic.GetTimeTest()}"),
-                        endsupport.InformationLabelLeft(f"Количество верных ответов составило: {str(self.statistic.items['rightCount'])}"),
-                        endsupport.InformationLabelLeft("Больше информации")]
+                       endsupport.InformationLabelLeft(f"Количество верных ответов составило: {str(self.statistic.items['rightCount'])}"),
+                       endsupport.InformationLabelLeft("Больше информации")]
 
         self.window_label_percent_result_widget.layout.addWidget(self.label_percents)
         self.window_label_result_widget.layout.addWidget(self.label_result)
@@ -551,10 +591,10 @@ class MainDesign(object):
         # Create Button Next
         self.button_next = acsupport.CreateButtonNext()
         self.button_next.setEnabled(False)
-        self.button_next.clicked.connect(self.next_step_spelling)
+        self.button_next.clicked.connect(self.NextStepSpelling())
         self.window_bottom_layout.addWidget(self.button_next, alignment=QtCore.Qt.AlignRight)
 
-    def next_step_spelling(self):
+    def NextStepSpelling(self):
 
         self.button_bottom.setEnabled(True)
 
@@ -572,7 +612,7 @@ class MainDesign(object):
 
         if self.current_number_word == len(self.all_curent_words):
             self.button_next.setEnabled(False)
-            self.StartEndSpelling()
+            self.EndScreenSetupSpelling()
         else:
 
             # Delete from word layout
@@ -594,58 +634,27 @@ class MainDesign(object):
         else:
             spelling_worker.addition(self.current_word.word, 'hard')
 
+    # Generation result screen
+    def EndScreenSetupSpelling(self):
 
-    def StartEndSpelling(self):
+        # Delete
+        self.DeleteWidgets([self.window_label_widget, self.window_word_widget, self.window_bottom_widget])
 
-        self.EndLayoutsSetupSpelling()
+        # Create end time for statistic
+        self.end_time = round(datetime.datetime.now().timestamp())
 
-    def EndLayoutsSetupSpelling(self):
+        # Statistic
+        self.WriteStatisticSpelling()
 
-            # Delete
-            self.window_label_widget.deleteLater()
-            self.window_word_widget.deleteLater()
-            self.window_bottom_widget.deleteLater()
+        # Widgets
+        self.CreateEndScreenWidgets()
 
-            # Create Result
-            self.end_time = round(datetime.datetime.now().timestamp())
-            if self.flag == 'all':
-                self.statistic = stat.Statistic("Орфография (полностью)", self.test_starting_time,
-                                                self.end_time, self.number_of_tests, self.number_right_words,
-                                                self.number_wrong_words)
-            else:
-                self.statistic = stat.Statistic("Орфография (сложные)", self.test_starting_time,
-                                                self.end_time, self.number_of_tests, self.number_right_words,
-                                                self.number_wrong_words)
+        # Result widgets
+        self.CreateResultsWidgets()
 
-            # Widgets
-            self.window_label_result_widget = endsupport.WidgetLabelResult()
-            self.window_main_layout.addWidget(self.window_label_result_widget)
+        # Bottom widgets
+        self.CreateEndBottomWidgets()
 
-            self.window_label_percent_result_widget = endsupport.WidgetPercentsResult()
-            self.window_main_layout.addWidget(self.window_label_percent_result_widget)
-
-            self.window_three_labels_widget = endsupport.WidgetThreeLabelsResult(self)
-            self.window_main_layout.addWidget(self.window_three_labels_widget)
-
-            # Result
-            self.label_result = endsupport.ResultLabel()
-            self.label_result.setText("Ваш результат")
-
-            self.label_percents = endsupport.PercentsLabel()
-            self.label_percents.GiveText(self.statistic.PercentsResultTest())
-
-            three_items = [
-                endsupport.InformationLabelLeft(f"Время прохождения теста составило: {self.statistic.GetTimeTest()}"),
-                endsupport.InformationLabelLeft(
-                    f"Количество верных ответов составило: {str(self.statistic.items['rightCount'])}"),
-                endsupport.InformationLabelLeft("Больше информации")]
-
-            self.window_label_percent_result_widget.layout.addWidget(self.label_percents)
-            self.window_label_result_widget.layout.addWidget(self.label_result)
-            self.window_three_labels_widget.CreateLayouts(three_items)
-
-            # Commit result to json
-            JsonWorking.WriteToJson(self.statistic.items)
 
 
     def StartStatisticSetup(self):
@@ -703,6 +712,8 @@ class MainDesign(object):
             self.statistic_list.setItemWidget(list_widget_item, new_item)
 
 
+
+    # Display statistic list
     def DisplayList(self):
 
         self.statistic_list.clear()
@@ -751,10 +762,67 @@ class MainDesign(object):
         self.DisplayList()
 
 
+    # Write statistic for spelling
+    def WriteStatisticSpelling(self):
+
+        # Divide on "all" and "hard"
+        if self.flag == 'all':
+            self.statistic = stat.Statistic("Орфография (полностью)", self.test_starting_time,
+                                            self.end_time, self.number_of_tests, self.number_right_words,
+                                            self.number_wrong_words)
+        else:
+            self.statistic = stat.Statistic("Орфография (сложные)", self.test_starting_time,
+                                            self.end_time, self.number_of_tests, self.number_right_words,
+                                            self.number_wrong_words)
+
+        # Commit result to json
+        JsonWorking.WriteToJson(self.statistic.items)
 
 
+    # Delete widgets
+    def DeleteWidgets(self, widgets: list):
+
+        for widget in widgets:
+            widget.deleteLater()
 
 
+    # Create End widgets for anyone way
+    def CreateEndScreenWidgets(self):
+
+        # Widgets
+        self.window_label_result_widget = endsupport.WidgetLabelResult()
+        self.window_main_layout.addWidget(self.window_label_result_widget)
+
+        self.window_label_percent_result_widget = endsupport.WidgetPercentsResult()
+        self.window_main_layout.addWidget(self.window_label_percent_result_widget)
+
+        self.window_three_labels_widget = endsupport.WidgetThreeLabelsResult(self)
+        self.window_main_layout.addWidget(self.window_three_labels_widget)
+
+
+    # Bottom widgets
+    def CreateEndBottomWidgets(self):
+
+        three_items = [
+            endsupport.InformationLabelLeft(f"Время прохождения теста составило: {self.statistic.GetTimeTest()}"),
+            endsupport.InformationLabelLeft(
+                f"Количество верных ответов составило: {str(self.statistic.items['rightCount'])}"),
+            endsupport.InformationLabelLeft("Больше информации")]
+
+        self.window_label_percent_result_widget.layout.addWidget(self.label_percents)
+        self.window_label_result_widget.layout.addWidget(self.label_result)
+        self.window_three_labels_widget.CreateLayouts(three_items)
+
+
+    # Create result widgets: label result and label percents
+    def CreateResultsWidgets(self):
+
+        # Result
+        self.label_result = endsupport.ResultLabel()
+        self.label_result.setText("Ваш результат")
+
+        self.label_percents = endsupport.PercentsLabel()
+        self.label_percents.GiveText(self.statistic.PercentsResultTest())
 
 
 
