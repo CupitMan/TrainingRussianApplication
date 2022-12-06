@@ -265,7 +265,7 @@ class MainDesign(object):
 
         for button in self.word_pushbuttons_vector:
             self.window_word_layout.addWidget(button)
-            button.clicked.connect(self.ClickLetterButton())
+            button.clicked.connect(self.ClickLetterButton)
             if button.text().upper() not in self.vowels:
                 button.setEnabled(False)
 
