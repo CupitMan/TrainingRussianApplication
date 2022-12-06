@@ -591,7 +591,7 @@ class MainDesign(object):
         # Create Button Next
         self.button_next = acsupport.CreateButtonNext()
         self.button_next.setEnabled(False)
-        self.button_next.clicked.connect(self.NextStepSpelling())
+        self.button_next.clicked.connect(self.NextStepSpelling)
         self.window_bottom_layout.addWidget(self.button_next, alignment=QtCore.Qt.AlignRight)
 
     def NextStepSpelling(self):

@@ -1431,6 +1431,30 @@
             "allCount": 2,
             "rightCount": 2,
             "wrongCount": 0
+        },
+        {
+            "name": "\u041e\u0440\u0444\u043e\u0433\u0440\u0430\u0444\u0438\u044f (\u043f\u043e\u043b\u043d\u043e\u0441\u0442\u044c\u044e)",
+            "timeStart": 1670334702,
+            "timeEnd": 1670334714,
+            "allCount": 5,
+            "rightCount": 4,
+            "wrongCount": 1
+        },
+        {
+            "name": "\u041e\u0440\u0444\u043e\u0433\u0440\u0430\u0444\u0438\u044f (\u043f\u043e\u043b\u043d\u043e\u0441\u0442\u044c\u044e)",
+            "timeStart": 1670334777,
+            "timeEnd": 1670334793,
+            "allCount": 5,
+            "rightCount": 4,
+            "wrongCount": 1
+        },
+        {
+            "name": "\u041e\u0440\u0444\u043e\u0433\u0440\u0430\u0444\u0438\u044f (\u043f\u043e\u043b\u043d\u043e\u0441\u0442\u044c\u044e)",
+            "timeStart": 1670334801,
+            "timeEnd": 1670334817,
+            "allCount": 6,
+            "rightCount": 6,
+            "wrongCount": 0
         }
     ]
 }
